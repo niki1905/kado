@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kado Spesial Untuk Kamu ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #ffebee;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .gift-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .gift-box {
+            width: 200px;
+            height: 200px;
+            background-color: #ff7aa2;
+            position: relative;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            transform-style: preserve-3d;
+            animation: float 2s infinite alternate;
+        }
+        
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 200px;
+            background-color: #ff9eb5;
+            top: 0;
+            left: 80px;
+        }
+        
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 40px;
+            background-color: #ff9eb5;
+            top: 80px;
+            left: 0;
+        }
+        
+        .gift-lid {
+            width: 220px;
+            height: 30px;
+            background-color: #ff7aa2;
+            position: absolute;
+            top: -30px;
+            left: -10px;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+            transform-origin: bottom;
+            transition: transform 1s ease;
+        }
+        
+        .gift-lid::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background-color: #ff9eb5;
+            top: 0;
+            left: 85px;
+        }
+        
+        .gift-lid.open {
+            transform: rotateX(-180deg);
+        }
+        
+        .gift-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+            transition-delay: 1s;
+        }
+        
+        .gift-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .message-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            margin-top: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .message-container.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .message-container p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        .heart {
+            font-size: 24px;
+            color: #e91e63;
+            animation: pulse 1s infinite alternate;
+            margin: 0 5px;
+        }
+        
+        .love-btn {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+        
+        .love-btn:hover {
+            background-color: #c2185b;
+            transform: scale(1.05);
+        }
+        
+        .love-btn.show {
+            display: inline-block;
+            animation: fadeIn 1s;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            opacity: 0;
+        }
+        
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .message-paper {
+            position: absolute;
+            width: 180px;
+            height: 0;
+            background-color: #fff;
+            top: 50%;
+            left: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: height 1s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+        }
+        
+        .message-paper.show {
+            height: 150px;
+        }
+        
+        .message-text {
+            padding: 15px;
+            font-size: 14px;
+            text-align: center;
+            color: #e91e63;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            transition-delay: 1.2s;
+        }
+        
+        .message-text.show {
+            opacity: 1;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.3);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Efek balon dan hati keluar dari kado */
+        .flying-heart {
+            position: absolute;
+            font-size: 20px;
+            color: #e91e63;
+            z-index: 2;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background-color: #f48fb1;
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0;
+        }
+        
+        .balloon::before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.2);
+            bottom: -30px;
+            left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <div class="container">
+        <h1>Kado Spesial Untuk Kamu</h1>
+        <p class="message" id="clickMessage">Klik pada kado untuk membukanya!</p>
+        
+        <div class="gift-container" id="giftContainer">
+            <div class="gift-box" id="giftBox">
+                <div class="gift-lid" id="giftLid"></div>
+                <div class="message-paper" id="messagePaper">
+                    <div class="message-text" id="messageText">
+                        Aku Sayang Kamu ❤️
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="message-container" id="messageContainer">
+            <p>Hai Sayang, <span class="heart">❤️</span></p>
+            <p id="typingText"></p>
+            <p>Terima kasih karena selalu ada di sampingku. Kamu adalah anugerah terindah dalam hidupku.</p>
+            <p>Dengan cinta, <br>[Nama Kamu]</p>
+            <button class="love-btn" id="loveBtn">Kirim Cinta ❤️</button>
+        </div>
+    </div>
+    
+    <script>
+        // Elemen-elemen pada halaman
+        const giftContainer = document.getElementById('giftContainer');
+        const giftBox = document.getElementById('giftBox');
+        const giftLid = document.getElementById('giftLid');
+        const messagePaper = document.getElementById('messagePaper');
+        const messageText = document.getElementById('messageText');
+        const messageContainer = document.getElementById('messageContainer');
+        const clickMessage = document.getElementById('clickMessage');
+        const typingText = document.getElementById('typingText');
+        const loveBtn = document.getElementById('loveBtn');
+        const heartsContainer = document.getElementById('heartsContainer');
+        
+        // Pesan yang akan diketik
+        const message = "Sejak pertama kali bertemu denganmu, hidupku menjadi lebih berwarna. Setiap momen bersamamu terasa istimewa. Aku sangat bersyukur memilikimu dalam hidupku.";
+        let index = 0;
+        let isGiftOpened = false;
+        
+        // Animasi ketik
+        function typeWriter() {
+            if (index < message.length) {
+                typingText.innerHTML += message.charAt(index);
+                index++;
+                setTimeout(typeWriter, 50);
+            } else {
+                // Setelah animasi ketik selesai, tampilkan tombol
+                setTimeout(() => {
+                    loveBtn.classList.add('show');
+                }, 500);
+            }
+        }
+        
+        // Tampilkan pesan klik
+        setTimeout(() => {
+            clickMessage.style.opacity = 1;
+        }, 1000);
+        
+        // Buat beberapa hati di latar belakang
+        function createBackgroundHearts() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.fontSize = (Math.random() * 15 + 5) + 'px';
+                heart.style.color = getRandomColor();
+                heart.style.opacity = 0.2;
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.top = Math.random() * window.innerHeight + 'px';
+                heart.style.animation = `pulse ${Math.random() * 2 + 2}s infinite alternate`;
+                heart.style.zIndex = '-1';
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Buat hati dan balon yang terbang dari kado
+        function createFlyingElements() {
+            // Buat hati yang terbang
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'flying-heart';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = giftBox.offsetLeft + (giftBox.offsetWidth / 2) + 'px';
+                    heart.style.top = giftBox.offsetTop + (giftBox.offsetHeight / 2) + 'px';
+                    
+                    document.body.appendChild(heart);
+                    
+                    const randomAngle = Math.random() * Math.PI * 2;
+                    const randomDistance = Math.random() * 150 + 50;
+                    const targetX = Math.cos(randomAngle) * randomDistance;
+                    const targetY = Math.sin(randomAngle) * randomDistance;
+                    
+                    heart.animate(
+                        [
+                            { transform: 'translate(0, 0) scale(0.5)', opacity: 0 },
+                            { transform: `translate(${targetX}px, ${targetY}px) scale(1)`, opacity: 1, offset: 0.6 },
+                            { transform: `translate(${targetX * 1.5}px, ${targetY * 1.5}px) scale(0.5)`, opacity: 0 }
+                        ],
+                        {
+                            duration: 2000,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                        }
+                    ).onfinish = () => heart.remove();
+                }, i * 100);
+            }
+            
+            // Buat balon yang terbang
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    balloon.style.left = giftBox.offsetLeft + (giftBox.offsetWidth / 2) - 15 + 'px';
+                    balloon.style.top = giftBox.offsetTop + (giftBox.offsetHeight / 2) + 'px';
+                    balloon.style.backgroundColor = getRandomColor();
+                    
+                    document.body.appendChild(balloon);
+                    
+                    const randomX = (Math.random() - 0.5) * 150;
+                    
+                    balloon.animate(
+                        [
+                            { transform: 'translate(0, 0) scale(0.5)', opacity: 0 },
+                            { transform: `translate(${randomX}px, -100px) scale(1)`, opacity: 1, offset: 0.3 },
+                            { transform: `translate(${randomX * 1.5}px, -300px) scale(0.8)`, opacity: 0 }
+                        ],
+                        {
+                            duration: 3000,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                        }
+                    ).onfinish = () => balloon.remove();
+                }, i * 200 + 500);
+            }
+        }
+        
+        // Event ketika kado diklik
+        giftContainer.addEventListener('click', () => {
+            if (isGiftOpened) return;
+            isGiftOpened = true;
+            
+            // Buka tutup kado
+            giftLid.classList.add('open');
+            giftBox.style.animation = 'none';
+            
+            // Sembunyikan pesan klik
+            clickMessage.style.opacity = 0;
+            
+            // Tampilkan kertas pesan dari dalam kado
+            setTimeout(() => {
+                messagePaper.classList.add('show');
+                
+                setTimeout(() => {
+                    messageText.classList.add('show');
+                    createFlyingElements();
+                    
+                    // Tampilkan pesan lengkap setelah animasi kado
+                    setTimeout(() => {
+                        messageContainer.classList.add('show');
+                        // Mulai animasi ketik
+                        setTimeout(typeWriter, 500);
+                        
+                        // Tembakan confetti
+                        createConfetti();
+                    }, 1500);
+                }, 1000);
+            }, 800);
+        });
+        
+        // Event ketika tombol cinta diklik
+        loveBtn.addEventListener('click', () => {
+            createFloatingHearts();
+            createBalloons();
+        });
+        
+        // Fungsi untuk membuat confetti
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = -10 + 'px';
+                confetti.style.backgroundColor = getRandomColor();
+                document.body.appendChild(confetti);
+                
+                // Animasi jatuh
+                const animation = confetti.animate(
+                    [
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                    ],
+                    {
+                        duration: Math.random() * 3000 + 2000,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    }
+                );
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+        
+        // Fungsi untuk membuat hati melayang
+        function createFloatingHearts() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.style.position = 'absolute';
+                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = window.innerHeight + 'px';
+                    heart.style.opacity = Math.random() * 0.5 + 0.5;
+                    heart.style.zIndex = '-1';
+                    heartsContainer.appendChild(heart);
+                    
+                    // Animasi melayang
+                    const animation = heart.animate(
+                        [
+                            { transform: 'translateY(0) rotate(0deg)' },
+                            { transform: `translateY(-${window.innerHeight + 100}px) rotate(${Math.random() * 360}deg)` }
+                        ],
+                        {
+                            duration: Math.random() * 5000 + 5000,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                        }
+                    );
+                    
+                    animation.onfinish = () => {
+                        heart.remove();
+                    };
+                }, i * 100);
+            }
+        }
+        
+        // Fungsi untuk membuat balon
+        function createBalloons() {
+            const colors = ['#e91e63', '#f48fb1', '#f06292', '#ec407a', '#d81b60'];
+            
+            for (let i = 0; i < 20; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * window.innerWidth + 'px';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.transform = `scale(${Math.random() * 0.5 + 0.7})`;
+                document.body.appendChild(balloon);
+                
+                // Animasi balon naik
+                const animation = balloon.animate(
+                    [
+                        { bottom: '-100px', opacity: 0 },
+                        { bottom: '20%', opacity: 1 },
+                        { bottom: '110%', opacity: 0.7 }
+                    ],
+                    {
+                        duration: Math.random() * 5000 + 5000,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                    }
+                );
+                
+                animation.onfinish = () => {
+                    balloon.remove();
+                };
+            }
+        }
+        
+        // Fungsi untuk mendapatkan warna acak
+        function getRandomColor() {
+            const colors = ['#e91e63', '#f48fb1', '#f06292', '#ec407a', '#d81b60', 
+                          '#c2185b', '#ad1457', '#880e4f', '#ff80ab', '#ff4081'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Panggil fungsi untuk membuat hati di latar belakang
+        createBackgroundHearts();
+    </script>
+</body>
+</html>
